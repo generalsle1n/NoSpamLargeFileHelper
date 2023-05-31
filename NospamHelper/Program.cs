@@ -16,7 +16,6 @@ IConfiguration tempConfig = new ConfigurationBuilder()
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<Worker>();
         services.AddSingleton<NoSpamHelper>();
         services.AddSingleton<VirustotalHelper>();
 
