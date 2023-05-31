@@ -45,8 +45,15 @@ IHost host = Host.CreateDefaultBuilder(args)
             });
         });
     })
+    .ConfigureLogging(log =>
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.File(logPathFolder, rollingInterval: RollingInterval.Month)
+            .CreateLogger();
     })
     })
+    .UseSerilog()
     .Build();
 
 await host.RunAsync();
