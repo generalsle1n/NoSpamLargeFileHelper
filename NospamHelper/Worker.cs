@@ -28,15 +28,13 @@ namespace NospamHelper
                 _nospamHelper.ReleaseLargeFile(File);
             }
         }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
+        public async Task Execute(IJobExecutionContext context)
             {
                 List<LargeFileEntry> AllFiles = _nospamHelper.GetUnprocessedLargeFiles();
-                List<Task<ScanResult>> AllScans = new List<Task<ScanResult>>();
-                foreach (LargeFileEntry file in AllFiles)
+            foreach(LargeFileEntry File in AllFiles)
                 { 
-                    ProcessSingleFile(file);
+                _logger.LogInformation($"Added File to Queue {File.Name}");
+                await ProcessSingleFile(File);
                 }
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
