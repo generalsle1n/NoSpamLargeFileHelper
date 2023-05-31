@@ -52,6 +52,9 @@ IHost host = Host.CreateDefaultBuilder(args)
             .WriteTo.File(logPathFolder, rollingInterval: RollingInterval.Month)
             .CreateLogger();
     })
+    .UseWindowsService(conf =>
+    {
+        conf.ServiceName = "NoSpamHelper";
     })
     .UseSerilog()
     .Build();
