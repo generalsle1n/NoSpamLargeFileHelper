@@ -18,14 +18,16 @@ namespace NospamHelper
             _nospamHelper = NoSpamHelper;
             _virusTotalHelper = virustotalHelper;
         }
-        private async Task ProcessSingleFile(LargeFileEntry File)
+        private async Task ProcessSingleFile(LargeFileEntry LargeFile)
         {
-            HttpResponseMessage response = await _http.GetAsync(File.DownloadUrl);
+            HttpResponseMessage response = await _http.GetAsync(LargeFile.DownloadUrl);
             byte[] fileContent = await response.Content.ReadAsByteArrayAsync();
-            bool Result = await _virusTotalHelper.ProccessFile(fileContent, File.Name);
+
+            bool Result = await _virusTotalHelper.ProccessFile(fileContent, LargeFile);
             if (Result)
             {
-                _nospamHelper.ReleaseLargeFile(File);
+                _logger.LogInformation($"{LargeFile.Name} clean");
+                _nospamHelper.ReleaseLargeFile(LargeFile);
             }
         }
         public async Task Execute(IJobExecutionContext context)
