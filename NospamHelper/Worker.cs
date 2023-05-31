@@ -1,10 +1,11 @@
 using NospamHelper.Model;
+using Quartz;
 using VirusTotalNet.ResponseCodes;
 using VirusTotalNet.Results;
 
 namespace NospamHelper
 {
-    public class Worker : BackgroundService
+    public class Worker : IJob
     {
         private readonly ILogger<Worker> _logger;
         private readonly NoSpamHelper _nospamHelper;
