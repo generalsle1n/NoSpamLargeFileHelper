@@ -10,13 +10,17 @@ namespace NospamHelper
         private readonly ILogger<Worker> _logger;
         private readonly NoSpamHelper _nospamHelper;
         private readonly VirustotalHelper _virusTotalHelper;
+        private readonly MailHelper _mailHelper;
+        private readonly IConfiguration _config;
         private HttpClient _http = new HttpClient();
         private const int _waitTime = (1 * 1000) * 20;
-        public Worker(ILogger<Worker> logger, NoSpamHelper NoSpamHelper, VirustotalHelper virustotalHelper)
+        public Worker(ILogger<Worker> logger, NoSpamHelper NoSpamHelper, VirustotalHelper virustotalHelper, MailHelper MailHelper, IConfiguration Config)
         {
             _logger = logger;
             _nospamHelper = NoSpamHelper;
             _virusTotalHelper = virustotalHelper;
+            _mailHelper = MailHelper;
+            _config = Config;
         }
         private async Task ProcessSingleFile(LargeFileEntry LargeFile)
         {
@@ -28,6 +32,11 @@ namespace NospamHelper
             {
                 _logger.LogInformation($"{LargeFile.Name} clean");
                 _nospamHelper.ReleaseLargeFile(LargeFile);
+
+                if (_config.GetValue<bool>("MailNotification"))
+                {
+                    _mailHelper.SendNotification(LargeFile);
+                }
             }
         }
         public async Task Execute(IJobExecutionContext context)
