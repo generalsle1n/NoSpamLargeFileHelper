@@ -40,15 +40,15 @@ namespace NospamHelper
             }
         }
         public async Task Execute(IJobExecutionContext context)
-            {
-                List<LargeFileEntry> AllFiles = _nospamHelper.GetUnprocessedLargeFiles();
+        {
+            List<LargeFileEntry> AllFiles = _nospamHelper.GetUnprocessedLargeFiles();
             foreach(LargeFileEntry File in AllFiles)
-                { 
+            { 
                 _logger.LogInformation($"Added File to Queue {File.Name}");
                 await ProcessSingleFile(File);
-                }
+            }
 
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
         }
     }
 }
