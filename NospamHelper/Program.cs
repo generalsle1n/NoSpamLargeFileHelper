@@ -18,6 +18,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddSingleton<NoSpamHelper>();
         services.AddSingleton<VirustotalHelper>();
+        services.AddSingleton<MailHelper>();
 
         services.AddQuartzHostedService(settings =>
         {
